@@ -114,4 +114,41 @@ class LineToEBouncyView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    data class LTEBNode(var i : Int, val state : State = State()) {
+
+        private var next : LTEBNode? = null
+        private var prev : LTEBNode? = null
+
+        init {
+            addNeighbor()
+        }
+
+        fun addNeighbor() {
+            next = LTEBNode(i + 1)
+            next?.prev = this
+        }
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            canvas.drawBLENode(i, state.scale, paint)
+            next?.draw(canvas, paint)
+        }
+
+        fun update(cb : (Float) -> Unit) {
+            state.update(cb)
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            state.startUpdating(cb)
+        }
+
+        fun getNext(dir : Int, cb : () -> Unit) : LTEBNode {
+            var curr : LTEBNode? = prev
+            if (curr != null) {
+                return curr
+            }
+            cb()
+            return this
+        }
+    }
 }
