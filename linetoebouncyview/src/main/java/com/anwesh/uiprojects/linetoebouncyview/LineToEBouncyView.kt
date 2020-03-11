@@ -54,14 +54,15 @@ fun Canvas.drawBLENode(i : Int, scale : Float, paint : Paint) {
 
 class LineToEBouncyView(ctx : Context) : View(ctx) {
 
+    private val renderer : Renderer = Renderer(this)
     override fun onDraw(canvas : Canvas) {
-
+        renderer.render(canvas)
     }
 
     override fun onTouchEvent(event : MotionEvent) : Boolean {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-
+                renderer.handleTap()
             }
         }
         return true
@@ -182,7 +183,7 @@ class LineToEBouncyView(ctx : Context) : View(ctx) {
         private val lteb : LineToEBouncy = LineToEBouncy(0)
         private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-        fun render(canvas : Canvas, paint : Paint) {
+        fun render(canvas : Canvas) {
             canvas.drawColor(backColor)
             lteb.draw(canvas, paint)
             animator.animate {
