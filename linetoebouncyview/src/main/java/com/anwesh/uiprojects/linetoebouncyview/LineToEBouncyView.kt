@@ -13,10 +13,10 @@ import android.app.Activity
 import android.content.Context
 
 val nodes : Int = 5
-val lines : Int = 5
+val lines : Int = 2
 val strokeFactor : Int = 90
 val sizeFactor : Float = 2.9f
-val scGap : Float = 0.02f
+val scGap : Float = 0.02f / lines
 val foreColor : Int = Color.parseColor("#4CAF50")
 val backColor : Int = Color.parseColor("#BDBDBD")
 val delay : Long = 20
@@ -30,11 +30,12 @@ fun Canvas.drawBouncyLineToE(scale : Float, size : Float, paint : Paint) {
     val sf : Float = scale.sinify()
     drawLine(0f, -size, 0f, size, paint)
     drawLine(0f, 0f, size / 2, 0f, paint)
-    for (j in 0..1) {
+    for (j in 0..(lines - 1)) {
         val sfi : Float = sf.divideScale(j, lines)
         save()
         scale(1f, 1f - 2 * j)
-        drawLine(0f, 0f, size / 2 + (size / 2) * sfi, size * sfi, paint)
+        translate(0f, size * sfi)
+        drawLine(0f, 0f, size / 2 + (size / 2) * sfi, 0f, paint)
         restore()
     }
 }
@@ -126,8 +127,10 @@ class LineToEBouncyView(ctx : Context) : View(ctx) {
         }
 
         fun addNeighbor() {
-            next = LTEBNode(i + 1)
-            next?.prev = this
+            if (i < nodes - 1) {
+                next = LTEBNode(i + 1)
+                next?.prev = this
+            }
         }
 
         fun draw(canvas : Canvas, paint : Paint) {
@@ -145,6 +148,9 @@ class LineToEBouncyView(ctx : Context) : View(ctx) {
 
         fun getNext(dir : Int, cb : () -> Unit) : LTEBNode {
             var curr : LTEBNode? = prev
+            if (dir == 1) {
+                curr = next
+            }
             if (curr != null) {
                 return curr
             }
