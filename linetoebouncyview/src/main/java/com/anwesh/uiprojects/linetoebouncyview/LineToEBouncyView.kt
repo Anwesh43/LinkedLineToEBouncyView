@@ -50,3 +50,19 @@ fun Canvas.drawBLENode(i : Int, scale : Float, paint : Paint) {
     drawBouncyLineToE(scale, gap / sizeFactor, paint)
     restore()
 }
+
+class LineToEBouncyView(ctx : Context) : View(ctx) {
+
+    override fun onDraw(canvas : Canvas) {
+
+    }
+
+    override fun onTouchEvent(event : MotionEvent) : Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+
+            }
+        }
+        return true
+    }
+}
